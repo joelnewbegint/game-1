@@ -1,0 +1,309 @@
+{
+  "elara_dialogue": {
+    "npcId": "elara",
+    "npcName": "Lorekeeper Elara",
+    "clanId": "embercrest",
+    "title": "Keeper of the Sacred Flame",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Greetings, traveler. I see the celestial light pulsing within your right eye... Can it truly be? The living spark of the First Eye walking among mortals?",
+        "choices": [
+          { "text": "What is this place, Lorekeeper?", "nextNode": "explain_shrine", "modifyTrust": { "embercrest": 5 } },
+          { "text": "I seek the Elemental Stones of the Five Gods.", "nextNode": "mention_stones", "condition": "!flags.elara_quest_offered", "modifyTrust": { "embercrest": 10 } },
+          { "text": "I have recovered the Ancient Fire Fragment!", "nextNode": "turn_in_quest", "condition": "quests.q_ember_relic.objectives.obj_retrieve_fragment && quests.q_ember_relic.state === 'active'" },
+          { "text": "I must take my leave.", "nextNode": null }
+        ]
+      },
+      "explain_shrine": {
+        "text": "You stand upon the Dais of the Shattered Eye. Ignareth willingly shattered the celestial lens out of pure divine love, protecting mortals from being blinded by holy light.",
+        "isLie": true,
+        "lieReason": "[Eye Vision Pierces Deceit]: Ignareth did not shatter the eye out of love; the gods tore the First Eye apart in a desperate panic when they realized their shared lifeforce was bleeding away.",
+        "choices": [
+          { "text": "Tell me about your clan, the Embercrest.", "nextNode": "explain_embercrest", "modifyTrust": { "embercrest": 5 } },
+          { "text": "[Eye Vision] You speak of holy sacrifice, yet your words ring hollow, Elara.", "nextNode": "confront_lie", "condition": "flags.eye_vision_active || flags.confronted_elara", "modifyTrust": { "embercrest": -5, "veilborn": 15 } },
+          { "text": "Is there any way I can help prove my goodwill?", "nextNode": "offer_quest", "condition": "quests.q_ember_relic.state === 'not_started'" },
+          { "text": "I see. Let us speak of other matters.", "nextNode": "start" }
+        ]
+      },
+      "confront_lie": {
+        "text": "You... you see past the sacred liturgy? By the ash... The priests of the Order swore that the congregation would never discover the truth. The gods were dying, traveler. They are dying still.",
+        "setFlags": { "confronted_elara": true },
+        "choices": [
+          { "text": "Why hide the truth from your people?", "nextNode": "start", "modifyTrust": { "veilborn": 10 } },
+          { "text": "Tell me of the missing fire shard.", "nextNode": "offer_quest", "condition": "quests.q_ember_relic.state === 'not_started'" }
+        ]
+      },
+      "explain_embercrest": {
+        "text": "We revere Ignareth the Burning Mother. Her flame cleanses and tempers the soul, like fine steel in the forge.",
+        "choices": [
+          { "text": "Passion and cleansing flame are worthy virtues.", "nextNode": "start", "modifyTrust": { "embercrest": 10 } }
+        ]
+      },
+      "mention_stones": {
+        "text": "One of the shards—the Stone of Pyres—rests deep in the Caldera, but an ancient fragment broke off near the Arch.",
+        "choices": [
+          { "text": "I will retrieve the fragment for you.", "nextNode": "start", "startQuest": "q_ember_relic", "setFlags": { "elara_quest_offered": true } }
+        ]
+      },
+      "offer_quest": {
+        "text": "Near the northern Archway, an ancient shard of the Stone of Pyres hums with fading heat. If you bring it to me, I shall grant you a sacred relic.",
+        "choices": [
+          { "text": "I accept the task.", "nextNode": "start", "startQuest": "q_ember_relic", "setFlags": { "elara_quest_offered": true } }
+        ]
+      },
+      "turn_in_quest": {
+        "text": "By Ignareth's mercy! The shard warms my hands as if plucked from the First Eye itself. Take this Amulet of Cinderfall. Seek Warmaster Varek in Cinderfall Village to the north!",
+        "choices": [
+          { "text": "I will seek out Cinderfall.", "nextNode": null, "completeQuest": "q_ember_relic", "modifyTrust": { "embercrest": 25 } }
+        ]
+      }
+    }
+  },
+
+  "varek_dialogue": {
+    "npcId": "varek",
+    "npcName": "Warmaster Varek",
+    "clanId": "embercrest",
+    "title": "Chieftain of Cinderfall",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Halt, wanderer! You step into Cinderfall with a celestial glow in your brow. We of the flame do not bow to hollow omens. State your business in our highlands!",
+        "choices": [
+          { "text": "I seek an audience with the Burning Mother.", "nextNode": "audience_plea" },
+          { "text": "I come to unite the five clans before war destroys us all.", "nextNode": "unity_plea", "modifyTrust": { "embercrest": -5, "tidewrought": 10, "stonebound": 10 } },
+          { "text": "I stand with Embercrest. Your strength in battle is legendary.", "nextNode": "praise_strength", "modifyTrust": { "embercrest": 15 } },
+          { "text": "I have spoken with High Priestess Pyra as you commanded.", "nextNode": "complete_welcome", "condition": "quests.q_cinderfall_welcome.objectives.obj_speak_pyra && quests.q_cinderfall_welcome.state === 'active'" },
+          { "text": "Farewell, Chieftain.", "nextNode": null }
+        ]
+      },
+      "audience_plea": {
+        "text": "An audience? The Caldera is barred to all save those who prove their marrow. Even our smiths must forge their own keys before the temple gates part. Seek Forgemaster Kael at the village forge, and Pyra at the Great Pyre.",
+        "choices": [
+          { "text": "I will earn my passage.", "nextNode": null, "startQuest": "q_cinderfall_welcome", "completeObjective": { "quest": "q_cinderfall_welcome", "obj": "obj_speak_varek" } }
+        ]
+      },
+      "unity_plea": {
+        "text": "Unity? The Tidewrought drown our caravans and the Stonebound barricade their mountain passes! Only flame has the purity to cut through this stagnation.",
+        "choices": [
+          { "text": "Violence will leave all five clans in ashes, Varek.", "nextNode": "audience_plea", "modifyTrust": { "embercrest": -10, "veilborn": 15 } },
+          { "text": "Let me prove my worth through action, not words.", "nextNode": "audience_plea", "modifyTrust": { "embercrest": 10 } }
+        ]
+      },
+      "praise_strength": {
+        "text": "Ha! At least your tongue carries the heat of truth. The weak perish in our mountain frosts; only the resolute endure. Speak with Pyra and Kael.",
+        "choices": [
+          { "text": "I shall do so immediately.", "nextNode": null, "startQuest": "q_cinderfall_welcome", "completeObjective": { "quest": "q_cinderfall_welcome", "obj": "obj_speak_varek" } }
+        ]
+      },
+      "complete_welcome": {
+        "text": "Pyra gave you her holy ash mark? Then you have our formal greeting, wanderer. Take this piece of raw Igneous Ore. Forgemaster Kael will need it if you hope to smelt the key to the Temple.",
+        "choices": [
+          { "text": "Thank you, Chieftain.", "nextNode": null, "completeQuest": "q_cinderfall_welcome", "startQuest": "q_forge_crucible" }
+        ]
+      }
+    }
+  },
+
+  "kael_dialogue": {
+    "npcId": "kael",
+    "npcName": "Forgemaster Kael",
+    "clanId": "embercrest",
+    "title": "Master of the Sacred Anvil",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Mind the sparks, stranger! This anvil has shaped fifty thousand blades for the clan war. What brings you to my crucible?",
+        "choices": [
+          { "text": "Chieftain Varek said you can forge the Obsidian Sun Key.", "nextNode": "explain_key", "condition": "quests.q_forge_crucible.state === 'active'" },
+          { "text": "I have solved the Crucible puzzle!", "nextNode": "turn_in_forge", "condition": "quests.q_forge_crucible.objectives.obj_solve_forge && quests.q_forge_crucible.state === 'active'" },
+          { "text": "How do you manage to work near this intense heat?", "nextNode": "forge_lore" },
+          { "text": "Just looking around.", "nextNode": null }
+        ]
+      },
+      "explain_key": {
+        "text": "Aye, the Sun Key. The Caldera lock will only accept obsidian forged at three sacred thresholds: First, blast the draft with the bellows (3). Next, stoke the igneous coal (2). Finally, quench in cold flux (1). Step up to the forge console and dial the registers in that order!",
+        "choices": [
+          { "text": "I will configure the furnace registers.", "nextNode": null, "completeObjective": { "quest": "q_forge_crucible", "obj": "obj_deliver_ore" } }
+        ]
+      },
+      "turn_in_forge": {
+        "text": "By the Burning Mother's hammer! You balanced the registers perfectly. Look at this golden luster—the Obsidian Sun Key is complete! Take it. Next, seek Pyra for the beasts' trial.",
+        "choices": [
+          { "text": "Thank you, Forgemaster.", "nextNode": null, "completeQuest": "q_forge_crucible", "startQuest": "q_beasts_blessing" }
+        ]
+      },
+      "forge_lore": {
+        "text": "The secret isn't enduring the heat—it's becoming the heat. A blacksmith who fears burns should stick to weaving wool.",
+        "choices": [
+          { "text": "A true master of the craft.", "nextNode": "start", "modifyTrust": { "embercrest": 5 } }
+        ]
+      }
+    }
+  },
+
+  "pyra_dialogue": {
+    "npcId": "pyra",
+    "npcName": "High Priestess Pyra",
+    "clanId": "embercrest",
+    "title": "Voice of Ignareth",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "The sacred pyre hungers for devotion. I sense an ancient, divine fragment burning behind your iris, traveler. Why do you stand before the altar?",
+        "choices": [
+          { "text": "I seek your blessing, Priestess.", "nextNode": "give_blessing", "condition": "quests.q_cinderfall_welcome.state === 'active'" },
+          { "text": "Tell me of the sacred beasts: the Phoenix and the Lion.", "nextNode": "explain_beasts" },
+          { "text": "Is it true the sacred pyres never need relighting?", "nextNode": "test_lie" },
+          { "text": "I have communed with the Lion and the Phoenix!", "nextNode": "turn_in_beasts", "condition": "quests.q_beasts_blessing.objectives.obj_commune_lion && quests.q_beasts_blessing.objectives.obj_collect_feather && quests.q_beasts_blessing.state === 'active'" },
+          { "text": "May the flame guide you.", "nextNode": null }
+        ]
+      },
+      "give_blessing": {
+        "text": "Kneel and receive the cinder mark upon your forehead. May Ignareth's solar gaze incinerate your doubts! Inform Chieftain Varek that the pyre welcomes you.",
+        "choices": [
+          { "text": "I receive the mark with reverence.", "nextNode": null, "completeObjective": { "quest": "q_cinderfall_welcome", "obj": "obj_speak_pyra" }, "modifyTrust": { "embercrest": 10 } }
+        ]
+      },
+      "explain_beasts": {
+        "text": "The Fire Lion roars from the Pride Crags to the west, challenging all who lack resolve. Above him roosts the Phoenix upon Solar Aerie. Commune with both to prove you walk the path of kings.",
+        "choices": [
+          { "text": "I shall journey to the crags.", "nextNode": null }
+        ]
+      },
+      "test_lie": {
+        "text": "The Holy Pyre has burned for five hundred years without a single cinder dying. Ignareth's power is infinite and eternal.",
+        "isLie": true,
+        "lieReason": "[Eye Vision Pierces Deceit]: Pyra secretly adds ground cinder-pitch every midnight; she has had visions of the sacred fire turning to cold ash within her lifetime.",
+        "choices": [
+          { "text": "[Eye Vision] You add pitch every midnight, Pyra. You know the divine fire is fading.", "nextNode": "confront_pyra_lie", "condition": "flags.eye_vision_active", "modifyTrust": { "embercrest": -10, "veilborn": 20 } },
+          { "text": "A testament to the goddess's might.", "nextNode": "start", "modifyTrust": { "embercrest": 5 } }
+        ]
+      },
+      "confront_pyra_lie": {
+        "text": "Hush! Speak not such blasphemies where the warriors can hear! If the clan knew the divine hearth was cooling, despair would snuff us out before our enemies do. Go... seek the beasts. Perhaps they still remember how to rekindle the sun.",
+        "choices": [
+          { "text": "I will uncover the truth for all of us.", "nextNode": "start" }
+        ]
+      },
+      "turn_in_beasts": {
+        "text": "The Phoenix gifted you an eternal feather, and the Lion yielded his talisman! You truly are the harbinger foretold. Beyond the village lies the Molten Chasm—speak to Morvath on the edge.",
+        "choices": [
+          { "text": "Onward to the Caldera.", "nextNode": null, "completeQuest": "q_beasts_blessing", "startQuest": "q_molten_crossing" }
+        ]
+      }
+    }
+  },
+
+  "morvath_dialogue": {
+    "npcId": "morvath",
+    "npcName": "Morvath the Doubter",
+    "clanId": "embercrest",
+    "title": "Exiled Philosopher",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Ah, another pilgrim marching toward the boiling crater. Tell me, do you plan to drown in magma, or are you wiser than the zealots in the village?",
+        "choices": [
+          { "text": "How does one cross the Molten Chasm safely?", "nextNode": "explain_chasm", "condition": "quests.q_molten_crossing.state === 'active'" },
+          { "text": "Why are you camped out here in exile?", "nextNode": "explain_exile" },
+          { "text": "I have crossed the Molten Chasm!", "nextNode": "turn_in_crossing", "condition": "quests.q_molten_crossing.objectives.obj_cross_lava && quests.q_molten_crossing.state === 'active'" },
+          { "text": "Keep your cynicism to yourself, Morvath.", "nextNode": null }
+        ]
+      },
+      "explain_chasm": {
+        "text": "The lava will melt your boots in three seconds flat. But the ancient architects weren't savages—they built a path of submerged obsidian pedestals. Normal eyes can't see through the thermal glare. But that magic eye of yours? Activate Eye Vision [V], and the stepping stones will glow right before your feet!",
+        "choices": [
+          { "text": "I will activate Eye Vision to cross.", "nextNode": null }
+        ]
+      },
+      "turn_in_crossing": {
+        "text": "You actually did it! You crossed the boiling river using the hidden sight. The Temple of the Sacred Pyre lies straight ahead. You'll need to solve the Sun Refraction Prisms to open the gate.",
+        "choices": [
+          { "text": "Thank you for the guidance, Morvath.", "nextNode": null, "completeQuest": "q_molten_crossing", "startQuest": "q_temple_prisms" }
+        ]
+      },
+      "explain_exile": {
+        "text": "I read texts from the other four clans. When you realize the Tidewrought and Stonebound have identical claims of divine favoritism, you begin to question who started this farce.",
+        "choices": [
+          { "text": "Questioning blind doctrine is true wisdom.", "nextNode": "start", "modifyTrust": { "embercrest": -5, "veilborn": 15, "tidewrought": 10 } },
+          { "text": "Doubt is the luxury of cowards.", "nextNode": "start", "modifyTrust": { "embercrest": 10 } }
+        ]
+      }
+    }
+  },
+
+  "tula_dialogue": {
+    "npcId": "tula",
+    "npcName": "Little Tula",
+    "clanId": "embercrest",
+    "title": "Village Child",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Whoa! Your eye looks like a glowing blue sun! Are you a wizard from the floating cliffs?",
+        "choices": [
+          { "text": "No, little one, but I seek the sacred Phoenix.", "nextNode": "phoenix_folklore" },
+          { "text": "Don't play so close to the lava vents, Tula.", "nextNode": "child_warning", "modifyTrust": { "embercrest": 5 } },
+          { "text": "Run along home to your parents.", "nextNode": null }
+        ]
+      },
+      "phoenix_folklore": {
+        "text": "My grandad says the Phoenix loves shiny things! If you bow when you reach the high roost, she won't peck your head off. She shed a glowing feather up there yesterday!",
+        "choices": [
+          { "text": "Thanks for the tip, Tula!", "nextNode": "start" }
+        ]
+      },
+      "child_warning": {
+        "text": "I'm not scared! Ignareth's fire only burns bad people, that's what Priestess Pyra says! ...Though my cousin singed his eyebrows last week.",
+        "choices": [
+          { "text": "Stay safe, little one.", "nextNode": null }
+        ]
+      }
+    }
+  },
+
+  "ignareth_cinematic_dialogue": {
+    "npcId": "ignareth",
+    "npcName": "Ignareth the Burning Mother",
+    "clanId": "embercrest",
+    "title": "Goddess of the Sacred Pyre",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "MORTAL BEARER OF THE FIRST EYE... You have braved the furnace of Cinderfall, crossed the boiling chasm, and solved the solar prisms. At last, the living fragment stands before my dying flame.",
+        "choices": [
+          { "text": "Dying flame? Then the rumors are true—the gods are fading!", "nextNode": "truth_revealed" },
+          { "text": "I kneel before you, Burning Mother. Take my eye and reignite your glory!", "nextNode": "pledge_allegiance", "modifyTrust": { "embercrest": 35 } },
+          { "text": "I came for the Stone of Pyres. Aethrava must be unified.", "nextNode": "demand_stone", "modifyTrust": { "embercrest": 10, "tidewrought": 10, "stonebound": 10 } }
+        ]
+      },
+      "truth_revealed": {
+        "text": "We were never five gods, Kaelen. We are five wounds on a single celestial heart. When the Order of the Open Eye severed us, they damned us to bleed out across centuries of petty tribal war. My fire cannot burn much longer.",
+        "choices": [
+          { "text": "Then give me your Stone. I will heal the shattered being.", "nextNode": "bestow_stone" },
+          { "text": "If you are dying, the clans must prepare to stand alone.", "nextNode": "bestow_stone", "modifyTrust": { "embercrest": -10, "veilborn": 20 } }
+        ]
+      },
+      "pledge_allegiance": {
+        "text": "Your loyalty is fierce as untamed wild-fire. Yet a blind flame only consumes itself. Take my stone, Kaelen, and burn away the lies that choke our world.",
+        "choices": [
+          { "text": "I accept the sacred burden.", "nextNode": "bestow_stone" }
+        ]
+      },
+      "demand_stone": {
+        "text": "Bold words before a living inferno. Yet perhaps boldness is what this fractured realm needs. Take the Stone of Pyres—and remember that fire both creates and destroys.",
+        "choices": [
+          { "text": "I will wield it with wisdom.", "nextNode": "bestow_stone" }
+        ]
+      },
+      "bestow_stone": {
+        "text": "TAKE THE STONE OF PYRES! Let the first elemental shard find its home within your grimoire. Seek now the drown-ruins of the Tidewrought, where Nerivael sleeps in forgetting depths!",
+        "choices": [
+          { "text": "I claim the Fire Stone!", "nextNode": null, "completeQuest": "q_burning_mother" }
+        ]
+      }
+    }
+  }
+}

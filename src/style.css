@@ -1,0 +1,2390 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Outfit:wght@300;400;500;600;700&family=MedievalSharp&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #080c14;
+  font-family: 'Outfit', sans-serif;
+  color: #f1f5f9;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+#aethrava-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Modal utility classes */
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: flex !important;
+}
+
+/* ==========================================================================
+   Atmospheric Loading Screen
+   ========================================================================== */
+#aethrava-loading-screen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #111a2e 0%, #060911 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loading-content {
+  text-align: center;
+  max-width: 540px;
+  padding: 24px;
+}
+
+.loading-eye-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eye-outer {
+  position: absolute;
+  width: 68px;
+  height: 38px;
+  border: 2px solid #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
+  animation: eyeBlink 3.6s infinite ease-in-out;
+}
+
+.eye-inner {
+  width: 22px;
+  height: 22px;
+  background: radial-gradient(circle, #fde047 15%, #38bdf8 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 16px #38bdf8;
+  animation: eyeGlow 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes eyeBlink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+}
+
+@keyframes eyeGlow {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 12px #38bdf8); }
+}
+
+.game-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 0.35em;
+  background: linear-gradient(180deg, #ffffff 20%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+}
+
+.game-subtitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.25em;
+  color: #38bdf8;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.lore-quote {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  padding: 0 10px;
+}
+
+.quote-author {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-style: normal;
+  letter-spacing: 0.05em;
+}
+
+.progress-container {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #fde047);
+  box-shadow: 0 0 12px #38bdf8;
+  transition: width 0.3s ease-out;
+}
+
+.loading-status {
+  font-size: 0.85rem;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.start-btn {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #f8fafc;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.15em;
+  padding: 12px 36px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(2, 132, 199, 0.45);
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.start-btn:hover {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  box-shadow: 0 0 35px rgba(14, 165, 233, 0.7);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Main Menu (Title Overlay)
+   ========================================================================== */
+#aethrava-main-menu {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(17, 24, 39, 0.85) 0%, rgba(6, 9, 17, 0.98) 100%);
+  backdrop-filter: blur(8px);
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease;
+}
+
+.main-menu-content {
+  text-align: center;
+  max-width: 520px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-eye-emblem {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emblem-ring {
+  width: 76px;
+  height: 44px;
+  border: 2px solid #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+}
+
+.emblem-pupil {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fde047 10%, #38bdf8 80%);
+  box-shadow: 0 0 20px #38bdf8;
+  animation: eyeGlow 2s infinite alternate ease-in-out;
+}
+
+.menu-title {
+  font-family: 'Cinzel', serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: 0.35em;
+  background: linear-gradient(180deg, #ffffff 10%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+}
+
+.menu-tagline {
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  color: #38bdf8;
+  font-weight: 600;
+  margin-bottom: 36px;
+}
+
+.menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.menu-btn {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #f8fafc;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 14px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.menu-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: #38bdf8;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
+}
+
+.primary-menu-btn {
+  background: linear-gradient(135deg, rgba(8, 47, 73, 0.85), rgba(2, 132, 199, 0.85));
+  border-color: #38bdf8;
+  box-shadow: 0 0 25px rgba(2, 132, 199, 0.4);
+}
+
+.primary-menu-btn:hover {
+  background: linear-gradient(135deg, rgba(3, 105, 161, 0.95), rgba(14, 165, 233, 0.95));
+}
+
+.save-preview {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: #cbd5e1;
+  letter-spacing: 0.05em;
+}
+
+.menu-lore-preview {
+  margin-top: 36px;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   Top HUD Quick Bar (Debug / Touch / Journal / Book / Pause)
+   ========================================================================== */
+#aethrava-top-bar {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.hud-pill-btn {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hud-pill-btn:hover {
+  background: rgba(30, 41, 59, 0.85);
+  color: #f8fafc;
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.hud-pill-btn.active {
+  background: rgba(8, 47, 73, 0.85);
+  color: #38bdf8;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.hud-pill-btn.gold-accent {
+  border-color: rgba(212, 175, 55, 0.5);
+  color: #d4af37;
+}
+
+.hud-pill-btn.gold-accent:hover {
+  background: rgba(78, 62, 17, 0.6);
+  color: #fde047;
+  border-color: #fde047;
+}
+
+.hud-pill-btn.cyan-accent {
+  border-color: rgba(0, 240, 255, 0.5);
+  color: #00f0ff;
+}
+
+.hud-pill-btn.cyan-accent.active {
+  background: rgba(0, 100, 120, 0.8);
+  border-color: #00f0ff;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.6);
+}
+
+/* ==========================================================================
+   Eye Vision System (Screen Filter & HUD Energy Meter)
+   ========================================================================== */
+#aethrava-eye-vision-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 700;
+  transition: opacity 0.35s ease;
+}
+
+#aethrava-eye-vision-overlay.inactive {
+  display: none;
+}
+
+#aethrava-eye-vision-overlay.active {
+  display: block;
+  backdrop-filter: saturate(0.62) contrast(1.18);
+  animation: eyeVisionPulse 4s infinite alternate ease-in-out;
+}
+
+@keyframes eyeVisionPulse {
+  0% { backdrop-filter: saturate(0.62) contrast(1.18); }
+  100% { backdrop-filter: saturate(0.55) contrast(1.25); }
+}
+
+.eye-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 45%, rgba(0, 240, 255, 0.12) 80%, rgba(4, 9, 32, 0.72) 100%);
+  box-shadow: inset 0 0 80px rgba(0, 240, 255, 0.4);
+}
+
+.eye-reticle-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+  border: 1px dashed rgba(0, 240, 255, 0.4);
+  border-radius: 50%;
+  animation: rotateReticle 16s linear infinite;
+}
+
+@keyframes rotateReticle {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Eye Vision Energy HUD Widget */
+#aethrava-eye-energy-hud {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(8, 14, 26, 0.82);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 999px;
+  z-index: 950;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+#aethrava-eye-energy-hud.active {
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+#aethrava-eye-energy-hud.low-energy {
+  border-color: #f87171;
+  box-shadow: 0 0 16px rgba(248, 113, 113, 0.5);
+  animation: lowEnergyPulse 0.8s infinite alternate ease;
+}
+
+@keyframes lowEnergyPulse {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+.eye-hud-icon {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.hud-eye-outer {
+  width: 30px;
+  height: 18px;
+  border: 2px solid #00f0ff;
+  border-radius: 50%;
+}
+
+.hud-eye-pupil {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fde047 10%, #00f0ff 80%);
+  box-shadow: 0 0 8px #00f0ff;
+}
+
+.eye-hud-meter-container {
+  width: 110px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.eye-hud-meter-bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #0284c7, #00f0ff);
+  box-shadow: 0 0 10px #00f0ff;
+  transition: width 0.1s linear;
+}
+
+.eye-hud-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #00f0ff;
+}
+
+/* ==========================================================================
+   Floating 3D Interaction Prompt
+   ========================================================================== */
+#aethrava-floating-prompt {
+  position: fixed;
+  transform: translate(-50%, -100%);
+  background: rgba(10, 16, 28, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+  padding: 6px 14px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 900;
+  transition: opacity 0.15s ease;
+}
+
+#aethrava-floating-prompt.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#aethrava-floating-prompt.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.prompt-key {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #7dd3fc;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.prompt-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  letter-spacing: 0.03em;
+}
+
+/* ==========================================================================
+   Dialogue Modal System & Lie Detection
+   ========================================================================== */
+#aethrava-dialogue-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 10, 18, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 9000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+
+.dialogue-card {
+  width: 90%;
+  max-width: 680px;
+  background: rgba(13, 20, 36, 0.94);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.15);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dialogue-card.eye-pierced-lie {
+  border-color: #00f0ff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 240, 255, 0.35);
+}
+
+.dialogue-lie-alert {
+  margin-top: 10px;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid #c084fc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #f3e8ff;
+  font-size: 0.88rem;
+  animation: liePulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes liePulse {
+  0% { box-shadow: 0 0 10px rgba(192, 132, 252, 0.2); }
+  100% { box-shadow: 0 0 20px rgba(192, 132, 252, 0.45); }
+}
+
+.lie-heading {
+  color: #e9d5ff;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+  display: block;
+  font-size: 0.78rem;
+  margin-bottom: 2px;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.dialogue-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  padding-bottom: 10px;
+}
+
+.speaker-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff5c2b 0%, #7f1d1d 100%);
+  border: 2px solid #fde047;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 0 12px rgba(255, 92, 43, 0.5);
+}
+
+.speaker-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.05em;
+}
+
+.speaker-title {
+  font-size: 0.75rem;
+  color: #f59e0b;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dialogue-body {
+  min-height: 55px;
+}
+
+.dialogue-text {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+}
+
+.dialogue-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dialogue-choice-btn {
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #f8fafc;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  padding-left: 28px;
+}
+
+.dialogue-choice-btn::before {
+  content: '▸';
+  position: absolute;
+  left: 12px;
+  color: #38bdf8;
+  transition: transform 0.2s ease;
+}
+
+.dialogue-choice-btn:hover {
+  background: rgba(8, 47, 73, 0.85);
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+  padding-left: 32px;
+}
+
+.dialogue-choice-btn:hover::before {
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   The Book of Fractured Truths UI Modal
+   ========================================================================== */
+#aethrava-lore-book-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 15, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 9300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lore-book-wrapper {
+  width: 95%;
+  max-width: 960px;
+  height: 85vh;
+  max-height: 640px;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.book-tab-btn {
+  background: rgba(22, 17, 10, 0.8);
+  border: 1px solid #785a28;
+  color: #cbb279;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.book-tab-btn.active {
+  background: #2b1f13;
+  color: #fde047;
+  border-color: #d4af37;
+  box-shadow: 0 -2px 10px rgba(212, 175, 55, 0.2);
+}
+
+.contradiction-badge {
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.book-tab-btn.has-unlocked .contradiction-badge {
+  background: #eab308;
+  color: #000000;
+}
+
+.book-close-x {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Antique Book 3D Styling */
+.antique-book {
+  flex: 1;
+  position: relative;
+  background: #f4ebd9;
+  border: 8px solid #281a0e;
+  border-radius: 8px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(120, 80, 40, 0.35);
+  display: flex;
+  perspective: 1500px;
+  overflow: hidden;
+}
+
+.book-binding-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(40, 20, 5, 0.25) 0%, rgba(40, 20, 5, 0.6) 50%, rgba(40, 20, 5, 0.25) 100%);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.book-page {
+  flex: 1;
+  padding: 30px 36px;
+  overflow-y: auto;
+  position: relative;
+  background: #fbf5e8;
+  color: #2b1f13;
+  font-family: 'MedievalSharp', 'Outfit', serif;
+}
+
+.book-page.page-left {
+  border-right: 1px solid rgba(80, 50, 20, 0.2);
+  box-shadow: inset -15px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.book-page.page-right {
+  box-shadow: inset 15px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 3D Animated Flipping Sheet */
+.book-page-flipping {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: #f6ecdc;
+  transform-origin: left center;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 40;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+}
+
+.book-page-flipping.active.flip-forward {
+  opacity: 1;
+  animation: flipForward 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-page-flipping.active.flip-backward {
+  opacity: 1;
+  animation: flipBackward 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes flipForward {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(-180deg); opacity: 0; }
+}
+
+@keyframes flipBackward {
+  0% { transform: rotateY(-180deg); }
+  100% { transform: rotateY(0deg); opacity: 0; }
+}
+
+.parchment-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.page-meta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(120, 80, 40, 0.25);
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+}
+
+.page-number {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #785a28;
+}
+
+.page-clan-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+}
+
+.page-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #2b1f13;
+  margin-bottom: 12px;
+}
+
+.page-body-text {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: #3b2a1a;
+  flex: 1;
+}
+
+.illuminated-dropcap {
+  float: left;
+  font-family: 'Cinzel', serif;
+  font-size: 3.2rem;
+  line-height: 0.85;
+  margin-right: 8px;
+  font-weight: 900;
+}
+
+.page-claim-box {
+  margin-top: 14px;
+  background: rgba(120, 80, 40, 0.08);
+  border: 1px dashed rgba(120, 80, 40, 0.4);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.claim-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #785a28;
+}
+
+.claim-text {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #2b1f13;
+}
+
+/* Contradictions Side-by-Side Tab */
+.contradiction-left-page,
+.contradiction-right-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contradiction-header {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #2b1f13;
+}
+
+.topic-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.topic-pill-btn {
+  background: rgba(120, 80, 40, 0.15);
+  border: 1px solid rgba(120, 80, 40, 0.3);
+  color: #3b2a1a;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.topic-pill-btn.active {
+  background: #785a28;
+  color: #ffffff;
+  border-color: #5a3d1c;
+}
+
+.comparison-column {
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid var(--side-color);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.side-badge {
+  display: inline-block;
+  color: #ffffff;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.side-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2b1f13;
+  margin-bottom: 4px;
+}
+
+.side-claim {
+  font-size: 0.88rem;
+  font-style: italic;
+  font-weight: 600;
+  color: #3b2a1a;
+  margin-bottom: 6px;
+}
+
+.side-excerpt {
+  font-size: 0.8rem;
+  color: #5a4029;
+  line-height: 1.4;
+}
+
+.fractured-analysis-card {
+  margin-top: 8px;
+  background: rgba(120, 80, 40, 0.12);
+  border: 1px solid #785a28;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.analysis-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  color: #785a28;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.analysis-text {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #2b1f13;
+}
+
+.empty-book-page {
+  text-align: center;
+  padding: 40px 10px;
+}
+
+.empty-book-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.ancient-script {
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #5a3d1c;
+  margin-top: 14px;
+}
+
+.book-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.book-nav-btn {
+  background: rgba(22, 17, 10, 0.8);
+  border: 1px solid #785a28;
+  color: #cbb279;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.book-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.book-page-counter {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #cbb279;
+}
+
+.lore-open-book-banner {
+  background: rgba(120, 80, 40, 0.2);
+  border: 1px solid #785a28;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.open-book-prompt-btn {
+  background: linear-gradient(135deg, #785a28, #4d3618);
+  border: 1px solid #d4af37;
+  color: #fde047;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Unified Grimoire & Journal Modal (Quests, Stones, Inventory, Lore, Clans)
+   ========================================================================== */
+#aethrava-journal-modal,
+#aethrava-settings-modal,
+#aethrava-pause-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 9, 17, 0.78);
+  backdrop-filter: blur(8px);
+  z-index: 9200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.journal-card,
+.settings-card,
+.pause-card {
+  width: 100%;
+  max-width: 720px;
+  max-height: 85vh;
+  background: rgba(13, 20, 36, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.65), 0 0 30px rgba(56, 189, 248, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.25s ease-out;
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.journal-header,
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.journal-title,
+.settings-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.15em;
+  color: #f8fafc;
+}
+
+.journal-close-btn,
+.settings-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #94a3b8;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.journal-close-btn:hover,
+.settings-close-btn:hover {
+  color: #f8fafc;
+}
+
+.journal-nav {
+  display: flex;
+  background: rgba(15, 23, 42, 0.75);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  overflow-x: auto;
+}
+
+.journal-tab-btn {
+  flex: 1;
+  min-width: 110px;
+  background: none;
+  border: none;
+  padding: 12px 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.journal-tab-btn:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.journal-tab-btn.active {
+  color: #38bdf8;
+  border-bottom-color: #38bdf8;
+  background: rgba(8, 47, 73, 0.45);
+}
+
+.journal-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #64748b;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+/* Quests View */
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+.quest-card {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.quest-card.active-card {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.quest-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.quest-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.quest-clan-badge,
+.quest-status-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #38bdf8;
+}
+
+.quest-desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  margin-bottom: 14px;
+}
+
+.quest-objectives h4 {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.quest-objectives ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.quest-objectives li {
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quest-objectives li.completed {
+  color: #4ade80;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+.quest-objectives li.pending {
+  color: #f1f5f9;
+}
+
+/* Elemental Stones View */
+.stones-overview {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.stones-overview h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: #f8fafc;
+  margin-bottom: 4px;
+}
+
+.stones-overview p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.stones-counter {
+  display: inline-block;
+  background: rgba(8, 47, 73, 0.6);
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.stones-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stone-slot {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: all 0.2s ease;
+}
+
+.stone-slot.unlocked {
+  border-color: var(--clan-color);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.4), inset 0 0 12px rgba(255, 255, 255, 0.05);
+}
+
+.stone-socket {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px dashed rgba(148, 163, 184, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stone-slot.unlocked .stone-socket {
+  border: 2px solid var(--clan-color);
+  box-shadow: 0 0 14px var(--clan-color);
+}
+
+.stone-gem {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.stone-slot.unlocked .stone-gem {
+  background: var(--clan-color);
+  box-shadow: 0 0 12px var(--clan-color);
+}
+
+.stone-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stone-element {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--clan-color);
+}
+
+.stone-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.stone-god {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.stone-desc {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  margin-top: 4px;
+}
+
+/* Inventory Items View */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.item-card {
+  display: flex;
+  gap: 14px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.item-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid #38bdf8;
+  background: rgba(8, 47, 73, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.item-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 2px;
+}
+
+.item-desc {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* Lore Pages View */
+.lore-pages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lore-card {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.lore-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.lore-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.lore-clan {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.lore-text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  font-style: italic;
+}
+
+/* Clan Trust View */
+.trust-summary-text {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.clans-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clan-row {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.clan-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.clan-meta .clan-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.clan-meta .clan-god {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.clan-meta .clan-status {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.trust-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.trust-bar-fill {
+  height: 100%;
+  transition: width 0.4s ease-out;
+}
+
+.trust-bar-neutral-mark {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.clan-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   Pause Menu
+   ========================================================================== */
+.pause-card {
+  max-width: 380px;
+  padding: 30px;
+  text-align: center;
+  align-items: center;
+}
+
+.pause-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  letter-spacing: 0.25em;
+  color: #f8fafc;
+  margin-bottom: 2px;
+}
+
+.pause-subtitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: #38bdf8;
+  margin-bottom: 24px;
+}
+
+.pause-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.pause-menu-btn {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #f8fafc;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pause-menu-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+}
+
+.pause-menu-btn.primary-btn {
+  background: linear-gradient(135deg, rgba(8, 47, 73, 0.85), rgba(2, 132, 199, 0.85));
+  border-color: #38bdf8;
+}
+
+.pause-menu-btn.danger-btn:hover {
+  border-color: #f87171;
+  color: #fca5a5;
+  box-shadow: 0 0 16px rgba(248, 113, 113, 0.3);
+}
+
+.save-status-msg {
+  margin-top: 14px;
+  font-size: 0.8rem;
+  min-height: 20px;
+}
+
+.save-status-msg.success { color: #4ade80; }
+.save-status-msg.error { color: #f87171; }
+
+/* ==========================================================================
+   Settings Modal
+   ========================================================================== */
+.settings-card {
+  max-width: 480px;
+}
+
+.settings-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.setting-label .sub-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.custom-slider {
+  width: 100%;
+  accent-color: #38bdf8;
+  cursor: pointer;
+}
+
+.quality-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.quality-btn {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #94a3b8;
+  padding: 8px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quality-btn.active {
+  background: rgba(8, 47, 73, 0.85);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
+.toggle-switch-btn {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #94a3b8;
+  padding: 10px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toggle-switch-btn.active {
+  background: rgba(8, 47, 73, 0.85);
+  border-color: #4ade80;
+  color: #4ade80;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.3);
+}
+
+.settings-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  text-align: right;
+}
+
+.settings-save-btn {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #f8fafc;
+  border: 1px solid #38bdf8;
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Notification Toast System
+   ========================================================================== */
+#aethrava-toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 9990;
+  width: 90%;
+  max-width: 380px;
+}
+
+.aethrava-toast {
+  background: rgba(10, 16, 28, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.aethrava-toast.fading {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.toast-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.toast-subtitle {
+  font-size: 0.74rem;
+  color: #cbd5e1;
+}
+
+.aethrava-toast.trust-positive { border-color: #4ade80; }
+.aethrava-toast.trust-positive .toast-title { color: #4ade80; }
+.aethrava-toast.trust-negative { border-color: #f87171; }
+.aethrava-toast.trust-negative .toast-title { color: #f87171; }
+.aethrava-toast.quest { border-color: #fde047; }
+.aethrava-toast.quest-completed { border-color: #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+.aethrava-toast.eye-vision { border-color: #00f0ff; box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
+.aethrava-toast.eye-vision .toast-title { color: #00f0ff; }
+
+/* ==========================================================================
+   Debug Overlay Panel
+   ========================================================================== */
+#aethrava-debug-panel {
+  position: fixed;
+  top: 56px;
+  right: 14px;
+  width: 280px;
+  background: rgba(10, 16, 28, 0.82);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: 'Outfit', monospace;
+  font-size: 0.82rem;
+  z-index: 999;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.debug-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.debug-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #38bdf8;
+}
+
+.debug-toggle-hint {
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.debug-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.debug-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.debug-row .lbl {
+  color: #94a3b8;
+  font-size: 0.78rem;
+}
+
+.debug-row .val {
+  color: #f1f5f9;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.debug-row .val.good { color: #4ade80; }
+.debug-row .val.warn { color: #facc15; }
+.debug-row .val.bad  { color: #f87171; }
+
+/* ==========================================================================
+   Desktop Control Instructions Hint
+   ========================================================================== */
+#desktop-controls-hint {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(11, 15, 25, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  display: flex;
+  gap: 16px;
+  pointer-events: none;
+  z-index: 500;
+}
+
+#desktop-controls-hint kbd {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #38bdf8;
+}
+
+/* ==========================================================================
+   Virtual Touch Controls (Mobile)
+   ========================================================================== */
+#aethrava-touch-controls {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 800;
+  touch-action: none;
+}
+
+#aethrava-touch-controls.hidden {
+  display: none !important;
+}
+
+#aethrava-touch-controls.active {
+  display: block;
+}
+
+/* Left Joystick Area */
+#touch-joystick-zone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 48vw;
+  height: 50vh;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+#joystick-base {
+  position: absolute;
+  left: 80px;
+  top: 60%;
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.75) 100%);
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+#joystick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #38bdf8 0%, #0284c7 100%);
+  border: 2px solid #e0f2fe;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
+  pointer-events: none;
+}
+
+/* Right Camera Look Zone */
+#touch-look-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 52vw;
+  height: 65vh;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.touch-look-hint {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+/* Action Buttons Zone */
+#touch-actions-zone {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+.touch-action-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(6px);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s, border-color 0.15s, background-color 0.15s;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.touch-action-btn:active {
+  transform: scale(0.92);
+  background: rgba(56, 189, 248, 0.35);
+  border-color: #38bdf8;
+}
+
+.touch-action-btn.eye-btn {
+  border-color: rgba(0, 240, 255, 0.6);
+  background: radial-gradient(circle, rgba(0, 180, 216, 0.3) 0%, rgba(15, 23, 42, 0.85) 100%);
+}
+
+.touch-action-btn.eye-btn:active {
+  background: #00f0ff;
+  color: #000000;
+}
+
+.touch-action-btn.jump-btn {
+  width: 70px;
+  height: 70px;
+  border-color: rgba(56, 189, 248, 0.6);
+  background: radial-gradient(circle, rgba(14, 116, 144, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+
+.touch-action-btn.jump-btn:active {
+  background: #0284c7;
+  border-color: #e0f2fe;
+}
+
+.touch-action-btn.active {
+  background: rgba(245, 158, 11, 0.35);
+  border-color: #f59e0b;
+  color: #fde047;
+}
+
+.touch-action-btn.interact-btn {
+  border-color: rgba(212, 175, 55, 0.6);
+}
+
+.btn-glyph {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #d4af37;
+}
+
+.btn-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+/* Mobile responsive layout */
+@media (max-width: 640px) {
+  #aethrava-debug-panel {
+    top: auto;
+    bottom: 84px;
+    right: 10px;
+    width: calc(100vw - 20px);
+    max-width: 320px;
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+
+  #desktop-controls-hint {
+    display: none;
+  }
+
+  .game-title {
+    font-size: 2.2rem;
+  }
+
+  .dialogue-card {
+    width: 95%;
+    padding: 16px;
+  }
+
+  .antique-book {
+    flex-direction: column;
+  }
+
+  .book-page.page-left {
+    border-right: none;
+    border-bottom: 1px solid rgba(80, 50, 20, 0.2);
+  }
+
+  .lore-book-wrapper {
+    height: 92vh;
+  }
+}
+
+/* ==========================================================================
+   Phase 4: Cinematic Overlay & Letterbox Cutscenes
+   ========================================================================== */
+#aethrava-cinematic-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9980;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#aethrava-cinematic-overlay.hidden {
+  display: none !important;
+}
+
+.cinematic-bar {
+  width: 100%;
+  height: 0px;
+  background: #000000;
+  transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+}
+
+#aethrava-cinematic-overlay.active .cinematic-bar {
+  height: 12vh;
+}
+
+.cinematic-title-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.0s ease, transform 1.0s ease;
+}
+
+#aethrava-cinematic-overlay.active .cinematic-title-card {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cinematic-title-card.fade-out {
+  opacity: 0;
+  transform: translate(-50%, -55%) scale(0.95);
+}
+
+.cinematic-subtitle {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.35em;
+  color: #ff5c2b;
+  text-shadow: 0 0 15px rgba(255, 92, 43, 0.8);
+  margin-bottom: 8px;
+}
+
+.cinematic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: #fff7ed;
+  text-shadow: 0 0 25px rgba(255, 92, 43, 0.9), 0 4px 18px rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================================================
+   Phase 4: Forge Crucible Puzzle Modal
+   ========================================================================== */
+#aethrava-forge-puzzle-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.82);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9970;
+}
+
+#aethrava-forge-puzzle-modal.hidden {
+  display: none !important;
+}
+
+.forge-puzzle-card {
+  width: 90%;
+  max-width: 520px;
+  background: linear-gradient(135deg, rgba(28, 25, 23, 0.98), rgba(41, 37, 36, 0.95));
+  border: 2px solid #ff5c2b;
+  border-radius: 14px;
+  box-shadow: 0 0 35px rgba(255, 92, 43, 0.35), 0 16px 40px rgba(0, 0, 0, 0.7);
+  padding: 24px 28px;
+  color: #f8fafc;
+  animation: modalPop 0.3s ease-out;
+}
+
+.forge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 92, 43, 0.3);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.forge-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: #ff5c2b;
+  text-shadow: 0 0 12px rgba(255, 92, 43, 0.6);
+}
+
+.forge-close-btn {
+  background: none;
+  border: none;
+  color: #a8a29e;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.forge-close-btn:hover {
+  color: #ffedd5;
+}
+
+.forge-desc {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #d6d3d1;
+  margin-bottom: 20px;
+}
+
+.forge-desc em {
+  color: #fdba74;
+}
+
+.forge-registers {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: rgba(12, 10, 9, 0.6);
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.forge-register-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reg-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fca5a5;
+}
+
+.reg-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.reg-btn {
+  background: rgba(41, 37, 36, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #a8a29e;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reg-btn:hover {
+  background: rgba(68, 64, 60, 0.9);
+  color: #fff;
+  border-color: #ff5c2b;
+}
+
+.reg-btn.active {
+  background: linear-gradient(135deg, rgba(153, 27, 27, 0.9), rgba(234, 88, 12, 0.9));
+  border-color: #ffedd5;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(234, 88, 12, 0.6);
+}
+
+.forge-status {
+  text-align: center;
+  font-size: 0.88rem;
+  min-height: 24px;
+  margin-bottom: 18px;
+  font-weight: 600;
+  color: #a8a29e;
+}
+
+.forge-status.success {
+  color: #4ade80;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.forge-status.error {
+  color: #f87171;
+  text-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
+}
+
+.forge-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.forge-ignite-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  border: 1px solid #ffedd5;
+  border-radius: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(234, 88, 12, 0.45);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.forge-ignite-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 30px rgba(234, 88, 12, 0.7);
+}
+
+.forge-ignite-btn:active {
+  transform: translateY(1px);
+}
+

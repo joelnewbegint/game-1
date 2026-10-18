@@ -1,0 +1,130 @@
+{
+  "id": "embercrest",
+  "name": "Embercrest Highlands",
+  "element": "Fire",
+  "god": "Ignareth the Burning Mother",
+  "sacredAnimals": ["Phoenix", "Lion"],
+  "villageName": "Cinderfall",
+  "description": "Volcanic highlands of active magma rivers, smoking obsidian crags, and roaring forges.",
+  "themeColors": {
+    "primary": "#ff5c2b",
+    "secondary": "#7f1d1d",
+    "glow": "#ff884d",
+    "ambientLight": "#ffe4cc",
+    "lavaEmissive": "#ff3700"
+  },
+  "landmarks": [
+    { "id": "cinderfall_village", "name": "Cinderfall Village", "x": 0, "z": -15 },
+    { "id": "kaels_forge", "name": "Forgemaster's Anvil", "x": -18, "z": -25 },
+    { "id": "great_pyre", "name": "Great Altar of the Flame", "x": 16, "z": -22 },
+    { "id": "lions_crag", "name": "Lion's Overlook Crag", "x": -45, "z": 20 },
+    { "id": "solar_aerie", "name": "The Solar Aerie", "x": -55, "z": 45 },
+    { "id": "molten_chasm", "name": "The Molten Chasm", "x": 0, "z": 55 },
+    { "id": "temple_entrance", "name": "Temple of the Sacred Pyre", "x": 0, "z": 105 },
+    { "id": "caldera_sanctum", "name": "Ignareth's Caldera", "x": 0, "z": 155 }
+  ],
+  "puzzles": {
+    "forge": {
+      "id": "forge_puzzle",
+      "name": "The Sacred Smelting Crucible",
+      "hint": "First blow the draft with the bellows (3), feed the igneous coal (2), then temper in cold flux (1).",
+      "targetSequence": [3, 2, 1],
+      "rewardItem": "temple_sun_key"
+    },
+    "lava_path": {
+      "id": "lava_path_puzzle",
+      "name": "The Molten Crossing",
+      "hint": "The lava will incinerate flesh, but Kaelen's Magic Eye [V] reveals the submerged obsidian stepping stones.",
+      "stonesCount": 7
+    },
+    "temple_prisms": {
+      "id": "temple_prism_puzzle",
+      "name": "The Sun Refraction Prisms",
+      "hint": "Rotate the three igneous focus prisms until the solar rays converge upon the Caldera Sun Gate.",
+      "targetAlignments": [0, 90, 180]
+    }
+  },
+  "quests": {
+    "q_cinderfall_welcome": {
+      "id": "q_cinderfall_welcome",
+      "title": "The Embers of Cinderfall",
+      "giver": "Warmaster Varek",
+      "description": "Speak with Chieftain Varek and High Priestess Pyra in Cinderfall to prove you come in peace.",
+      "objectives": [
+        { "id": "obj_speak_varek", "text": "Report to Chieftain Warmaster Varek at the Village Hall", "completed": false },
+        { "id": "obj_speak_pyra", "text": "Consult High Priestess Pyra by the Great Pyre", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "embercrest": 15 },
+        "items": ["igneous_ore"]
+      }
+    },
+    "q_forge_crucible": {
+      "id": "q_forge_crucible",
+      "title": "The Smith's Crucible",
+      "giver": "Forgemaster Kael",
+      "description": "Deliver the raw igneous ore to Forgemaster Kael and solve the forge temperature puzzle to shape the Obsidian Sun Key.",
+      "objectives": [
+        { "id": "obj_deliver_ore", "text": "Deliver Igneous Ore to Forgemaster Kael", "completed": false },
+        { "id": "obj_solve_forge", "text": "Smelt the Obsidian Sun Key at the Forge Station", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "embercrest": 20 },
+        "items": ["temple_sun_key"]
+      }
+    },
+    "q_beasts_blessing": {
+      "id": "q_beasts_blessing",
+      "title": "The Beast's Blessing",
+      "giver": "High Priestess Pyra",
+      "description": "Journey west to the Lion's Crag and Solar Aerie. Commune with the Sacred Lion and receive a feather from the Sacred Phoenix.",
+      "objectives": [
+        { "id": "obj_commune_lion", "text": "Approach the Sacred Fire Lion at Lion's Crag", "completed": false },
+        { "id": "obj_collect_feather", "text": "Receive the Radiant Phoenix Feather at Solar Aerie", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "embercrest": 25 },
+        "items": ["lion_mane_talisman", "phoenix_feather"]
+      }
+    },
+    "q_molten_crossing": {
+      "id": "q_molten_crossing",
+      "title": "The Molten Crossing",
+      "giver": "Morvath the Doubter",
+      "description": "Morvath warns of the lethal lava river guarding the temple. Use Kaelen's Magic Eye [V] to reveal the hidden obsidian stepping stones.",
+      "objectives": [
+        { "id": "obj_cross_lava", "text": "Traverse the Molten Chasm safely using Eye Vision", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "embercrest": 15 }
+      }
+    },
+    "q_temple_prisms": {
+      "id": "q_temple_prisms",
+      "title": "The Pillars of Ignareth",
+      "giver": "Temple Gate Guardian",
+      "description": "Align the three Pyre Focus Prisms outside the Temple of the Sacred Pyre to unlock the Caldera Sun Gate.",
+      "objectives": [
+        { "id": "obj_align_prisms", "text": "Rotate the 3 Fire Prisms to focus solar light onto the Gate", "completed": false },
+        { "id": "obj_unlock_gate", "text": "Insert the Obsidian Sun Key into the Caldera Gate", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "embercrest": 25 }
+      }
+    },
+    "q_burning_mother": {
+      "id": "q_burning_mother",
+      "title": "The Burning Mother's Verdict",
+      "giver": "Ignareth the Burning Mother",
+      "description": "Confront the goddess Ignareth in the heart of the volcanic caldera and receive the Fire Elemental Stone.",
+      "objectives": [
+        { "id": "obj_face_ignareth", "text": "Witness the manifestation of Ignareth in the Caldera", "completed": false },
+        { "id": "obj_claim_fire_stone", "text": "Claim the Stone of Pyres", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "embercrest": 35 },
+        "elementalStones": ["embercrest"]
+      }
+    }
+  }
+}

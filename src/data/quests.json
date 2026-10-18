@@ -1,0 +1,121 @@
+{
+  "q_ember_relic": {
+    "id": "q_ember_relic",
+    "title": "The Shattered Flame",
+    "clanId": "embercrest",
+    "giver": "Lorekeeper Elara",
+    "description": "Elara of Embercrest speaks of an ancient Fire Fragment resting beneath the Arch of the Ancients. Retrieve it before hostile zealots claim its lingering power.",
+    "objectives": [
+      {
+        "id": "obj_retrieve_fragment",
+        "text": "Locate and retrieve the Ancient Fire Fragment near the Arch",
+        "completed": false
+      },
+      {
+        "id": "obj_return_to_elara",
+        "text": "Return the fragment to Lorekeeper Elara at the Ancient Dais",
+        "completed": false
+      }
+    ],
+    "rewards": {
+      "clanTrust": {
+        "embercrest": 25,
+        "tidewrought": -5
+      },
+      "items": ["cinder_pendant"],
+      "elementalStones": ["embercrest"],
+      "lorePages": ["lore_ember_1"]
+    }
+  },
+  "q_cinderfall_welcome": {
+    "id": "q_cinderfall_welcome",
+    "title": "The Embers of Cinderfall",
+    "clanId": "embercrest",
+    "giver": "Warmaster Varek",
+    "description": "Speak with Chieftain Varek and High Priestess Pyra in Cinderfall Village to earn permission to walk the highlands.",
+    "objectives": [
+      { "id": "obj_speak_varek", "text": "Present yourself to Warmaster Varek at the Village Hall", "completed": false },
+      { "id": "obj_speak_pyra", "text": "Receive the holy flame blessing from High Priestess Pyra", "completed": false }
+    ],
+    "rewards": {
+      "clanTrust": { "embercrest": 15 },
+      "items": ["igneous_ore"],
+      "lorePages": ["lore_ember_4"]
+    }
+  },
+  "q_forge_crucible": {
+    "id": "q_forge_crucible",
+    "title": "The Smith's Crucible",
+    "clanId": "embercrest",
+    "giver": "Forgemaster Kael",
+    "description": "Deliver the raw igneous ore to Forgemaster Kael and configure the three furnace registers to smelt the Obsidian Sun Key.",
+    "objectives": [
+      { "id": "obj_deliver_ore", "text": "Deliver Igneous Ore to Forgemaster Kael", "completed": false },
+      { "id": "obj_solve_forge", "text": "Solve the heat registers at the Forge Station", "completed": false }
+    ],
+    "rewards": {
+      "clanTrust": { "embercrest": 20 },
+      "items": ["temple_sun_key"]
+    }
+  },
+  "q_beasts_blessing": {
+    "id": "q_beasts_blessing",
+    "title": "The Beast's Blessing",
+    "clanId": "embercrest",
+    "giver": "High Priestess Pyra",
+    "description": "Journey west to the Lion's Crag and Solar Aerie. Commune with the Sacred Fire Lion and receive a feather from the Sacred Phoenix.",
+    "objectives": [
+      { "id": "obj_commune_lion", "text": "Offer respect to the Sacred Fire Lion at Lion's Crag", "completed": false },
+      { "id": "obj_collect_feather", "text": "Receive the Radiant Phoenix Feather at Solar Aerie", "completed": false }
+    ],
+    "rewards": {
+      "clanTrust": { "embercrest": 25 },
+      "items": ["lion_mane_talisman", "phoenix_feather"],
+      "lorePages": ["lore_ember_5"]
+    }
+  },
+  "q_molten_crossing": {
+    "id": "q_molten_crossing",
+    "title": "The Molten Crossing",
+    "clanId": "embercrest",
+    "giver": "Morvath the Doubter",
+    "description": "Cross the lethal boiling lava of the Molten Chasm. Activate Kaelen's Magic Eye [V] to reveal the submerged obsidian stepping stones.",
+    "objectives": [
+      { "id": "obj_cross_lava", "text": "Traverse the Molten Chasm safely using Eye Vision", "completed": false }
+    ],
+    "rewards": {
+      "clanTrust": { "embercrest": 15 },
+      "lorePages": ["lore_ember_6"]
+    }
+  },
+  "q_temple_prisms": {
+    "id": "q_temple_prisms",
+    "title": "The Pillars of Ignareth",
+    "clanId": "embercrest",
+    "giver": "Temple Gate Guardian",
+    "description": "Rotate the three Pyre Focus Prisms outside the Temple of the Sacred Pyre to focus solar light and unlock the Caldera Sun Gate.",
+    "objectives": [
+      { "id": "obj_align_prisms", "text": "Rotate the 3 Fire Prisms to align with the Caldera Gate", "completed": false },
+      { "id": "obj_unlock_gate", "text": "Insert the Obsidian Sun Key to open the Gate", "completed": false }
+    ],
+    "rewards": {
+      "clanTrust": { "embercrest": 25 },
+      "lorePages": ["lore_ember_7"]
+    }
+  },
+  "q_burning_mother": {
+    "id": "q_burning_mother",
+    "title": "The Burning Mother's Verdict",
+    "clanId": "embercrest",
+    "giver": "Ignareth the Burning Mother",
+    "description": "Confront the goddess Ignareth in the heart of the volcanic caldera and receive the Fire Elemental Stone.",
+    "objectives": [
+      { "id": "obj_face_ignareth", "text": "Witness the manifestation of Ignareth in the Caldera", "completed": false },
+      { "id": "obj_claim_fire_stone", "text": "Claim the Stone of Pyres", "completed": false }
+    ],
+    "rewards": {
+      "clanTrust": { "embercrest": 35 },
+      "elementalStones": ["embercrest"]
+    }
+  }
+}
