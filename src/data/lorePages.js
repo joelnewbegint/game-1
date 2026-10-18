@@ -150,6 +150,51 @@ export const LORE_PAGES = {
     claim: 'Nerivael is slowly dispersing into the oceans; the deep god is losing cohesive memory.',
     text: `Listen closely to the abyssal whale-song: the words are unraveling. Nerivael's thoughts are spreading too thin across the boundless currents. Each century, the Deep Mind forgets a language, a constellation, an ancient promise.\n\nThe gods are not ascending; they are diluting like drops of wine in a limitless sea.`
   },
+  lore_tide_4: {
+    id: 'lore_tide_4',
+    number: 25,
+    title: 'The Drowned Library',
+    clan: 'Tidewrought',
+    clanId: 'tidewrought',
+    clanColor: '#1d92bd',
+    topicId: 'the_shattering',
+    claim: 'The First Eye flooded the primordial empire when mortal kings breached the celestial vault.',
+    text: `Beneath the tidal flats of Thalassport lie the marble domes of our drowned capital. Our ancestors were not savages waiting for fire; they built libraries that charted the currents of the cosmos.\n\nWhen greedy land-barons sought to carve the First Eye into jewels for their crowns, the sphere wept an ocean that submerged eighty leagues of coastline in a single night.`
+  },
+  lore_tide_5: {
+    id: 'lore_tide_5',
+    number: 26,
+    title: 'Song of the Abyssal Leviathan',
+    clan: 'Tidewrought',
+    clanId: 'tidewrought',
+    clanColor: '#1d92bd',
+    topicId: 'the_beasts_memory',
+    claim: 'The Sacred Abyssal Whale preserves the acoustic memory of creation in frequencies mortals cannot alter.',
+    text: `Humans carve their version of history in stone, yet wind and rain erode their vanity into smooth dust. The Great Whale sings into the seabed trenches, where sound travels ten thousand leagues without fading.\n\nEvery wave that breaks upon our cliffs carries ancient history in its foam. You need only listen with quiet reverence, rather than shouting over the roar of forge bellows.`
+  },
+  lore_tide_6: {
+    id: 'lore_tide_6',
+    number: 27,
+    title: 'The Trench of Forgetting',
+    clan: 'Tidewrought',
+    clanId: 'tidewrought',
+    clanColor: '#1d92bd',
+    topicId: 'the_world_core',
+    claim: 'The center of Aethrava is an unfathomable ocean abyss of pure memory, not a furnace of molten rock.',
+    text: `The Embercrest zealots tell absurd tales of an eternal furnace at the center of the world. Let them sail beyond the continental shelf and drop an iron sounding weight!\n\nTen miles down, there is no heat—only pitch-black water under crushing pressure, colder than mountain ice. The core of our realm is the oceanic mind of Nerivael, holding the weight of existence in silent contemplation.`
+  },
+  lore_tide_7: {
+    id: 'lore_tide_7',
+    number: 28,
+    title: 'The Weeping God',
+    clan: 'Tidewrought',
+    clanId: 'tidewrought',
+    clanColor: '#1d92bd',
+    topicId: 'the_nature_of_gods',
+    claim: 'Nerivael weeps oceanic brine because the five deities are fading splinters of one severed being.',
+    text: `Embercrest praises holy war as a forge that tempers the soul. What suicidal arrogance! Every warrior struck down on the frontier bleeds the remaining divine lifeforce faster.\n\nNerivael weeps not out of weakness, but because the Deep Mind remembers what the other four gods have forgotten: we were whole once. And divided, we shall all dissolve into nothingness.`
+  },
+
 
   // ==========================================
   // STONEBOUND (EARTH) - 3 Pages

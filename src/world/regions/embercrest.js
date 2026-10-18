@@ -155,6 +155,63 @@ export class EmbercrestRegion extends Region {
 
     // F. Caldera Sanctum & Colossal Altar of Ignareth (x: 0, z: 155)
     this.buildIgnarethCalderaSanctum(0, 155);
+
+    // G. Fast-Travel Waystone Portal (x: 0, z: -28)
+    this.buildWaystone(0, -28);
+  }
+
+  buildWaystone(x, z) {
+    const y = this.world.getGroundHeight(x, z);
+    const waystone = new THREE.Group();
+    waystone.position.set(x, y, z);
+
+    const plinth = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.5, 0.8, 8), this.materials.darkStone);
+    plinth.position.y = 0.4;
+    waystone.add(plinth);
+
+    const obelisk = new THREE.Mesh(new THREE.BoxGeometry(0.8, 3.8, 0.8), this.materials.basalt);
+    obelisk.position.y = 2.4;
+    waystone.add(obelisk);
+
+    const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.4), this.materials.goldTrim);
+    core.position.y = 4.6;
+    waystone.add(core);
+
+    const light = new THREE.PointLight(0xff5c2b, 2.0, 8.0);
+    light.position.y = 4.6;
+    waystone.add(light);
+
+    this.regionGroup.add(waystone);
+    this.collidables.push(plinth, obelisk);
+
+    this.animatedObjects.push({
+      update: (delta, elapsed) => {
+        core.rotation.y += delta * 1.5;
+        core.position.y = 4.6 + Math.sin(elapsed * 2.0) * 0.15;
+      }
+    });
+
+    const waystoneInteractable = {
+      name: 'Cinderfall Waystone',
+      position: new THREE.Vector3(x, y + 1.5, z),
+      interactionRadius: 3.5,
+      getPromptText: () => 'Fast Travel to Thalassport / Origin',
+      getInteractionPosition: () => new THREE.Vector3(x, y + 1.5, z),
+      interact: (player) => {
+        const dest = { x: 105, z: -16, name: 'Thalassport Harbor (Tidewrought)' };
+        player.position.set(dest.x, this.world.getGroundHeight(dest.x, dest.z), dest.z);
+        player.velocity.set(0, 0, 0);
+
+        if (this.audio) this.audio.playChime('relic');
+
+        this.gameState.emit('notification', {
+          title: 'Fast Travel Activated',
+          message: `Traveled via Ancient Waystone to ${dest.name}!`,
+          type: 'quest'
+        });
+      }
+    };
+    this.registerInteractable(waystoneInteractable);
   }
 
   buildLonghouse(x, z) {

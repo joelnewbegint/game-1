@@ -13,6 +13,7 @@ import { DayNightCycle } from './world/DayNightCycle.js';
 import { ParticleSystem } from './world/particles/ParticleSystem.js';
 import { CinematicManager } from './world/CinematicManager.js';
 import { EmbercrestRegion } from './world/regions/embercrest.js';
+import { TidewroughtRegion } from './world/regions/tidewrought.js';
 import { NPC } from './world/NPC.js';
 import { PickupItem } from './world/PickupItem.js';
 import { LorePagePickup } from './world/LorePagePickup.js';
@@ -79,9 +80,20 @@ function initGame() {
   // 10. Initialize Cinematic Cutscene Director
   const cinematicManager = new CinematicManager(engine, gameState, dialogueBox, audioManager);
 
-  // 11. Initialize Phase 4 Region: Embercrest (Fire Clan)
-  loadingScreen.setProgress(80, 'Populating Cinderfall Village & Caldera Sanctum...');
+  // 11. Initialize Phase 4 & Phase 5 Regions: Embercrest (Fire) & Tidewrought (Water)
+  loadingScreen.setProgress(75, 'Populating Cinderfall Village & Caldera Sanctum...');
   const embercrestRegion = new EmbercrestRegion(
+    engine.scene,
+    engine,
+    world,
+    gameState,
+    audioManager,
+    eyeVisionSystem,
+    cinematicManager
+  );
+
+  loadingScreen.setProgress(88, 'Dredging Thalassport Harbor & Sunken Sanctuary...');
+  const tidewroughtRegion = new TidewroughtRegion(
     engine.scene,
     engine,
     world,
@@ -157,8 +169,16 @@ function initGame() {
     interactionSystem.register(entity);
   });
 
+  // Register all Tidewrought Region Interactables
+  tidewroughtRegion.interactables.forEach(entity => {
+    interactionSystem.register(entity);
+  });
+
   // Register Region Collidables into World
   embercrestRegion.getCollidables().forEach(col => {
+    world.terrain.collidableObjects.push(col);
+  });
+  tidewroughtRegion.getCollidables().forEach(col => {
     world.terrain.collidableObjects.push(col);
   });
 
@@ -173,6 +193,7 @@ function initGame() {
     hiddenLorePage.syncWithState(gameState);
     hiddenArchMythPage.syncWithState(gameState);
     embercrestRegion.pickups.forEach(p => p.syncWithState(gameState));
+    tidewroughtRegion.pickups.forEach(p => p.syncWithState(gameState));
   };
 
   const mainMenu = new MainMenu(gameState, player, settingsUI, (isContinue) => {
@@ -240,6 +261,7 @@ function initGame() {
   engine.addUpdateCallback((delta, elapsed) => {
     const isCinematic = cinematicManager.isPlaying;
     const isForgePuzzleOpen = embercrestRegion.puzzles.forge?.modal?.classList.contains('visible');
+    const isSluicePuzzleOpen = tidewroughtRegion.puzzles.sluice?.modal?.classList.contains('visible');
 
     const isModalOpen = (
       dialogueBox.isOpen ||
@@ -249,6 +271,7 @@ function initGame() {
       loreBookUI.isOpen ||
       settingsUI.isOpen ||
       isForgePuzzleOpen ||
+      isSluicePuzzleOpen ||
       isCinematic
     );
 
@@ -287,8 +310,9 @@ function initGame() {
     // 7. Update Eye Vision System (Energy drainage & recharge)
     eyeVisionSystem.update(delta);
 
-    // 8. Update Embercrest Region Simulation (NPCs, Beasts, Puzzles, Fauna, Caldera Altar)
+    // 8. Update Region Simulations (NPCs, Beasts, Puzzles, Fauna, Altars)
     embercrestRegion.update(delta, elapsed, player);
+    tidewroughtRegion.update(delta, elapsed, player);
 
     // 9. Update Interactive Entities Animations
     elaraNPC.update(delta, elapsed);
@@ -326,6 +350,7 @@ function initGame() {
     particles: particleSystem,
     cinematic: cinematicManager,
     embercrest: embercrestRegion,
+    tidewrought: tidewroughtRegion,
     saveSystem: SaveSystem
   };
 }

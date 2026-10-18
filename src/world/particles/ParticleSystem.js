@@ -10,6 +10,7 @@ export class ParticleSystem {
 
     this.createEmbers();
     this.createForgeSmoke();
+    this.createSeaMist();
   }
 
   createEmbers() {
@@ -101,6 +102,45 @@ export class ParticleSystem {
     this.scene.add(this.smokeMesh);
   }
 
+  createSeaMist() {
+    this.mistCount = 200;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(this.mistCount * 3);
+    const scales = new Float32Array(this.mistCount);
+    this.mistVelocities = [];
+
+    // Distribute along eastern coastal shelf (x: 80 to 180, z: -40 to 160)
+    for (let i = 0; i < this.mistCount; i++) {
+      positions[i * 3] = 80 + Math.random() * 100;
+      positions[i * 3 + 1] = 0.5 + Math.random() * 10;
+      positions[i * 3 + 2] = -40 + Math.random() * 200;
+
+      scales[i] = 1.0 + Math.random() * 2.0;
+
+      this.mistVelocities.push({
+        vx: (Math.random() - 0.5) * 0.3 - 0.2, // Drifting inland with sea breeze
+        vy: 0.15 + Math.random() * 0.3,
+        vz: (Math.random() - 0.5) * 0.2,
+        sway: 0.5 + Math.random() * 1.5
+      });
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+
+    const mistMat = new THREE.PointsMaterial({
+      size: 4.5,
+      color: 0x7dd3fc,
+      transparent: true,
+      opacity: 0.25,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    this.mistMesh = new THREE.Points(geometry, mistMat);
+    this.scene.add(this.mistMesh);
+  }
+
   update(delta, elapsed, playerPos) {
     // 1. Update Embers
     if (this.emberMesh) {
@@ -147,5 +187,30 @@ export class ParticleSystem {
       }
       pos.needsUpdate = true;
     }
+
+    // 3. Update Sea Mist
+    if (this.mistMesh) {
+      const pos = this.mistMesh.geometry.attributes.position;
+      for (let i = 0; i < this.mistCount; i++) {
+        let y = pos.getY(i);
+        let x = pos.getX(i);
+        let z = pos.getZ(i);
+
+        const v = this.mistVelocities[i];
+        x += v.vx * delta;
+        y += Math.sin(elapsed * v.sway + i) * 0.02 + v.vy * delta;
+        z += v.vz * delta;
+
+        if (y > 14 || x < 70) {
+          y = 0.5;
+          x = 80 + Math.random() * 100;
+          z = -40 + Math.random() * 200;
+        }
+
+        pos.setXYZ(i, x, y, z);
+      }
+      pos.needsUpdate = true;
+    }
   }
 }
+

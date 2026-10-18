@@ -106,5 +106,46 @@ export const ITEMS_DATABASE = {
     icon: '💎',
     color: '#ef4444',
     description: 'A polished igneous crystal that refracts sunlight to align the Caldera gate.'
+  },
+  sunken_relic_fragment: {
+    id: 'sunken_relic_fragment',
+    name: 'Coral-Encrusted Astrolabe',
+    type: 'key_item',
+    icon: '🧭',
+    color: '#38bdf8',
+    description: 'A delicate pre-flood navigation instrument salvaged from the tidal shallows.'
+  },
+  sluice_gear_crank: {
+    id: 'sluice_gear_crank',
+    name: 'Bronze Sluice Crank',
+    type: 'tool',
+    icon: '⚙️',
+    color: '#ca8a04',
+    description: 'Heavy bronze gear crank required to adjust the harbor tide lock sluice gates.'
+  },
+  whale_ambergris: {
+    id: 'whale_ambergris',
+    name: 'Abyssal Whale Essence',
+    type: 'relic',
+    icon: '🐋',
+    color: '#0284c7',
+    description: 'A phosphorescent balm granted by the Sacred Abyssal Whale that calms troubled waters.'
+  },
+  serpent_scale_talisman: {
+    id: 'serpent_scale_talisman',
+    name: 'Great Serpent Scale',
+    type: 'relic',
+    icon: '🐍',
+    color: '#0d9488',
+    description: 'An iridescent green sea-serpent scale that pulses with oceanic depth currents.'
+  },
+  abyssal_prism_pearl: {
+    id: 'abyssal_prism_pearl',
+    name: 'Luminescent Tidal Pearl',
+    type: 'puzzle_item',
+    icon: '🔮',
+    color: '#22d3ee',
+    description: 'A giant pearl harvested from the flooded archives that focuses water reflections onto the deep seal.'
   }
 };
+

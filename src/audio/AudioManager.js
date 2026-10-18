@@ -65,6 +65,18 @@ export class AudioManager {
     }
   }
 
+  setMasterVolume(percent) {
+    this.setVolume(percent);
+  }
+
+  startAmbience() {
+    if (!this.isInitialized) {
+      this.init();
+    } else {
+      this.resume();
+    }
+  }
+
   startAmbient() {
     if (!this.ctx) return;
     this.resume();

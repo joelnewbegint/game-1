@@ -305,5 +305,259 @@
         ]
       }
     }
+  },
+
+  "marina_dialogue": {
+    "npcId": "marina",
+    "npcName": "Captain Marina",
+    "clanId": "tidewrought",
+    "title": "Harbor Master of Thalassport",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Heave to, traveler! Watch your step on these barnacle-slick docks. The currents off Thalassport can swallow a galleon in two swells. What business brings an eye-bearer to our coast?",
+        "choices": [
+          { "text": "I seek an audience with Nerivael the Deep Mind.", "nextNode": "audience_plea" },
+          { "text": "I heard rumors of smuggler syndicates operating in the cove.", "nextNode": "smuggler_inquiry" },
+          { "text": "I have spoken with Sea-Seer Vael as you directed.", "nextNode": "complete_arrival", "condition": "quests.q_tide_arrival.objectives.obj_speak_vael && quests.q_tide_arrival.state === 'active'" },
+          { "text": "I reported Corvo's contraband ring to your harbor guard.", "nextNode": "report_corvo_reward", "condition": "flags.reported_corvo && !flags.marina_rewarded_report" },
+          { "text": "Just taking in the salt air, Captain.", "nextNode": null }
+        ]
+      },
+      "audience_plea": {
+        "text": "An audience with the Deep Mind? Ha! The Sunken Sanctuary is sealed beneath forty fathoms of tide. The only way in is through the ancient flooded archives, and the sluice gates are jammed tight with silt. Seek out Scholar Sylas and Sea-Seer Vael near the tide pools.",
+        "choices": [
+          { "text": "I will seek them out immediately.", "nextNode": null, "startQuest": "q_tide_arrival", "completeObjective": { "quest": "q_tide_arrival", "obj": "obj_speak_marina" } }
+        ]
+      },
+      "smuggler_inquiry": {
+        "text": "Aye, Corvo and his bilge-rats are looting relics from the pre-flood domes and selling them to foreign black markets. If you catch him trafficking temple artifacts, bring him to justice!",
+        "choices": [
+          { "text": "I will keep my eyes open.", "nextNode": "start" }
+        ]
+      },
+      "complete_arrival": {
+        "text": "Vael read your tide-lines? Then the sea recognizes your step, wanderer. Take this Coral-Encrusted Astrolabe. Scholar Sylas needs it to decipher the ancient sluice mechanism.",
+        "choices": [
+          { "text": "Thank you, Captain Marina.", "nextNode": null, "completeQuest": "q_tide_arrival", "startQuest": "q_tide_sluice" }
+        ]
+      },
+      "report_corvo_reward": {
+        "text": "By the Great Whale's wake! You caught Corvo red-handed and recovered the temple pearl? You have done Thalassport a grand service, traveler. The fleet owes you a debt of honor!",
+        "setFlags": { "marina_rewarded_report": true },
+        "choices": [
+          { "text": "The rule of the sea must be respected.", "nextNode": "start", "modifyTrust": { "tidewrought": 25 } }
+        ]
+      }
+    }
+  },
+
+  "sylas_dialogue": {
+    "npcId": "sylas",
+    "npcName": "Scholar Sylas",
+    "clanId": "tidewrought",
+    "title": "Historian of Drowned Ruins",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Careful with that parchment! Salt damp is the greatest destroyer of pre-flood civilization. What discoveries have you dredged from the surf, wanderer?",
+        "choices": [
+          { "text": "I have the Coral Astrolabe from Captain Marina.", "nextNode": "receive_astrolabe", "condition": "quests.q_tide_sluice.state === 'active'" },
+          { "text": "I have operated the Sluice Valves and lowered the tide!", "nextNode": "complete_sluice", "condition": "quests.q_tide_sluice.objectives.obj_drain_sluice && quests.q_tide_sluice.state === 'active'" },
+          { "text": "Tell me of the Drowned Causeway ahead.", "nextNode": "explain_causeway" },
+          { "text": "I must be going.", "nextNode": null }
+        ]
+      },
+      "receive_astrolabe": {
+        "text": "Astounding! The gear ratios on this astrolabe show the exact tidal alignment needed to operate the harbor sluice gates! Listen carefully: First, open the Sea-Surge Valve (1). Second, shut the Mud-Gate (2). Third, engage the Lower Weir Drain (3). Turn the valves at the dam in that exact order!",
+        "choices": [
+          { "text": "I will configure the sluice valves.", "nextNode": null, "completeObjective": { "quest": "q_tide_sluice", "obj": "obj_deliver_relic" } }
+        ]
+      },
+      "complete_sluice": {
+        "text": "Look! The tide drains away from the lower basin! The Drowned Causeway is revealed! Yet take care—the deep water between the stone arches is perilous. Seek the sacred beasts before you cross.",
+        "choices": [
+          { "text": "Thank you, Scholar Sylas.", "nextNode": null, "completeQuest": "q_tide_sluice", "startQuest": "q_abyssal_beasts" }
+        ]
+      },
+      "explain_causeway": {
+        "text": "It was built before the First Eye shattered. When the waters rose, the central arches collapsed underwater. Normal mortals see only churning deep surf. But if you have the legendary sight, the submerged coral spans become visible!",
+        "choices": [
+          { "text": "My Eye Vision will find the path.", "nextNode": "start" }
+        ]
+      }
+    }
+  },
+
+  "vael_dialogue": {
+    "npcId": "vael",
+    "npcName": "Sea-Seer Vael",
+    "clanId": "tidewrought",
+    "title": "Voice of the Abyssal Tides",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Listen... do you hear the oceanic thrum beneath the shale? The tides carry forgotten names from five hundred leagues away. Why do you disturb the surface waters?",
+        "choices": [
+          { "text": "Captain Marina sent me to seek your counsel.", "nextNode": "give_guidance", "condition": "quests.q_tide_arrival.state === 'active'" },
+          { "text": "Tell me of the Sacred Whale and the Great Serpent.", "nextNode": "explain_beasts" },
+          { "text": "Is it true Nerivael watches over all oceans in serene omniscience?", "nextNode": "test_lie" },
+          { "text": "I have communed with both sacred beasts!", "nextNode": "complete_beasts", "condition": "quests.q_abyssal_beasts.objectives.obj_commune_whale && quests.q_abyssal_beasts.objectives.obj_commune_serpent && quests.q_abyssal_beasts.state === 'active'" },
+          { "text": "Peace to your meditations, Seer.", "nextNode": null }
+        ]
+      },
+      "give_guidance": {
+        "text": "A spark of celestial luminescence walks the coast. The Deep Mind stirs when you approach the tide pools. Inform Marina that the currents favor your entry.",
+        "choices": [
+          { "text": "I thank you, Sea-Seer.", "nextNode": null, "completeObjective": { "quest": "q_tide_arrival", "obj": "obj_speak_vael" }, "modifyTrust": { "tidewrought": 10 } }
+        ]
+      },
+      "explain_beasts": {
+        "text": "The Sacred Whale surfaces at Whale Song Shoals to the east, carrying the acoustic memories of the abyss. To the north-west, in Serpent's Trench, coils the Great Sea Serpent, guardian of the tidal thresholds. Receive their tokens to prove you carry no poison in your soul.",
+        "choices": [
+          { "text": "I shall journey to both shoals.", "nextNode": null }
+        ]
+      },
+      "test_lie": {
+        "text": "Nerivael rests in perfect oceanic tranquility. Not a single current shifts without the Deep Mind's loving design.",
+        "isLie": true,
+        "lieReason": "[Eye Vision Pierces Deceit]: Vael knows Nerivael is drowning in panic; the sea god's consciousness is dissolving and fragmenting with every passing century.",
+        "choices": [
+          { "text": "[Eye Vision] You lie, Vael. Nerivael is not tranquil—the deep mind is dissolving in terror.", "nextNode": "confront_vael_lie", "condition": "flags.eye_vision_active", "modifyTrust": { "tidewrought": -10, "veilborn": 20 } },
+          { "text": "A comforting thought in turbulent times.", "nextNode": "start", "modifyTrust": { "tidewrought": 5 } }
+        ]
+      },
+      "confront_vael_lie": {
+        "text": "Silence! Do you wish to cause mass hysteria in the fleet? Every night I hear the whale song turning to discordant cries! The god is forgetting who he is! Go... seek Corvo in the cove. He dredged a pearl from the sanctuary that might pierce the deep veil.",
+        "choices": [
+          { "text": "I will uncover the truth for all who walk the shores.", "nextNode": "start" }
+        ]
+      },
+      "complete_beasts": {
+        "text": "The Whale gifted you abyssal ambergris, and the Serpent yielded an emerald scale! You are consecrated by the tide. Now seek Corvo in the smuggler's cove—he holds the final key to the sanctuary.",
+        "choices": [
+          { "text": "I will confront Corvo.", "nextNode": null, "completeQuest": "q_abyssal_beasts", "startQuest": "q_smuggler_choice" }
+        ]
+      }
+    }
+  },
+
+  "corvo_dialogue": {
+    "npcId": "corvo",
+    "npcName": "Corvo the Smuggler",
+    "clanId": "tidewrought",
+    "title": "Tide-Cove Scavenger",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Keep your voice down, mate! You want Marina's marines swarming down here? I see what you're after—you need the Luminescent Tidal Pearl to unseal the temple vault, don't you?",
+        "choices": [
+          { "text": "Give me the temple pearl, Corvo.", "nextNode": "the_bargain", "condition": "quests.q_smuggler_choice.state === 'active'" },
+          { "text": "What are you doing hidden in this sea-cave?", "nextNode": "explain_trade" },
+          { "text": "I'll let you be.", "nextNode": null }
+        ]
+      },
+      "explain_trade": {
+        "text": "Salvage, mate. Pure salvage! The fleet calls it smuggling because they didn't get their cut. If an empire drowned five hundred years ago, its treasure belongs to whoever has the lungs to dive for it.",
+        "choices": [
+          { "text": "A convenient moral philosophy.", "nextNode": "start" }
+        ]
+      },
+      "the_bargain": {
+        "text": "Here's the deal: I fished this pearl from the submerged library vault. It's yours, free and clear—on ONE condition. Marina's patrol is searching the beach. You swear to misdirect her hounds away from my contraband cache. Deal?",
+        "choices": [
+          { "text": "[Moral Choice] Deal. I will misdirect Marina. Hand over the pearl.", "nextNode": "accept_smuggler", "modifyTrust": { "tidewrought": -10, "veilborn": 20 } },
+          { "text": "[Moral Choice] No deal, Corvo. Surrender the sacred relic or I call the harbor marines right now!", "nextNode": "reject_smuggler", "modifyTrust": { "tidewrought": 20, "veilborn": -10 } }
+        ]
+      },
+      "accept_smuggler": {
+        "text": "Smart traveler! Here is the Luminescent Tidal Pearl. Remember our pact: you saw nothing down in this cove! Now go cross the Drowned Causeway before the tide comes rushing back.",
+        "setFlags": { "helped_corvo": true },
+        "choices": [
+          { "text": "A deal is a deal.", "nextNode": null, "completeQuest": "q_smuggler_choice", "startQuest": "q_sunken_depths" }
+        ]
+      },
+      "reject_smuggler": {
+        "text": "Curse you and your righteous glare! Fine, take the blasted pearl! But you just made an enemy of every smuggler from here to the Sunken Fjord. Get out of my sight!",
+        "setFlags": { "reported_corvo": true },
+        "choices": [
+          { "text": "The sanctuary is sacred, Corvo.", "nextNode": null, "completeQuest": "q_smuggler_choice", "startQuest": "q_sunken_depths" }
+        ]
+      }
+    }
+  },
+
+  "mira_dialogue": {
+    "npcId": "mira",
+    "npcName": "Tidecaller Mira",
+    "clanId": "tidewrought",
+    "title": "Guardian of the Tide Pools",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "Gaze into the tide pools, wanderer. Notice how the anemones open and close with the rhythm of the moon? Life in Thalassport moves to water, not fire or iron.",
+        "choices": [
+          { "text": "How do I safely approach the Great Serpent?", "nextNode": "serpent_advice" },
+          { "text": "What do the coastal folk think of the Embercrest fire clan?", "nextNode": "fire_clan_opinion" },
+          { "text": "Farewell, Tidecaller.", "nextNode": null }
+        ]
+      },
+      "serpent_advice": {
+        "text": "The Serpent of the Trench hates sudden movements. Walk slowly across the tidal rocks and do not draw steel. If you show no hunger for violence, the serpent will grant you its emerald scale.",
+        "choices": [
+          { "text": "Thank you for the wisdom.", "nextNode": "start" }
+        ]
+      },
+      "fire_clan_opinion": {
+        "text": "Embercrest burns everything it touches until only soot remains. They think they are strong, but steam always rises above flame. One day, the oceans will swallow their volcanoes.",
+        "choices": [
+          { "text": "A grim prophecy.", "nextNode": "start" }
+        ]
+      }
+    }
+  },
+
+  "nerivael_cinematic_dialogue": {
+    "npcId": "nerivael",
+    "npcName": "Nerivael the Deep Mind",
+    "clanId": "tidewrought",
+    "title": "God of the Oceanic Trench",
+    "initialNode": "start",
+    "nodes": {
+      "start": {
+        "text": "WHO CALLS FROM THE SURFACE OF MEMORY? ...The First Eye pulses once more in mortal bone. For five centuries, my thoughts have washed across the abyss like sand slipping through fingers.",
+        "choices": [
+          { "text": "Nerivael, I have crossed the drowned ruins to retrieve the Water Stone.", "nextNode": "plea_stone" },
+          { "text": "Ignareth spoke of the gods dying. Is your memory truly unraveling?", "nextNode": "truth_revealed" },
+          { "text": "I come in reverence, Deep Mind. Let the tides wash away mortal grief.", "nextNode": "reverence_plea", "modifyTrust": { "tidewrought": 30 } }
+        ]
+      },
+      "truth_revealed": {
+        "text": "Ignareth spoke truth through her ashes... We are the scattered fragments of a slain celestial whole. With each century, I forget forty languages, three constellations, and the faces of my divine kin. Soon, only cold empty water will remain.",
+        "choices": [
+          { "text": "Then bestow your stone upon me. I will rebind the fractured truths.", "nextNode": "bestow_stone" },
+          { "text": "Perhaps forgetting is mercy for a world torn by war.", "nextNode": "bestow_stone", "modifyTrust": { "tidewrought": -10, "veilborn": 25 } }
+        ]
+      },
+      "plea_stone": {
+        "text": "The Stone of Abyssal Depth... You seek to hold the weight of five hundred leagues of ocean memory? It will crush any soul that lacks the resolve to look past mortal illusions.",
+        "choices": [
+          { "text": "My Eye has seen through the lies of both clans. I am ready.", "nextNode": "bestow_stone" }
+        ]
+      },
+      "reverence_plea": {
+        "text": "Your humility is a gentle tide in a tempest of mortal pride. Take this fragment, Kaelen, and let its cold depths balance the raging inferno of Ignareth's fire.",
+        "choices": [
+          { "text": "I receive the Water Stone with solemn honor.", "nextNode": "bestow_stone" }
+        ]
+      },
+      "bestow_stone": {
+        "text": "TAKE THE STONE OF ABYSSAL DEPTH! Feel the tides of antiquity surge through your veins! The Fire and Water shards now sing in harmony. Walk forward, Kaelen—the earth itself awaits your footstep in the Stonebound Peaks!",
+        "choices": [
+          { "text": "I claim the Water Stone!", "nextNode": null, "completeQuest": "q_deep_mind_verdict" }
+        ]
+      }
+    }
   }
 }
+

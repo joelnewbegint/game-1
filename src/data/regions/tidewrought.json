@@ -1,0 +1,143 @@
+{
+  "id": "tidewrought",
+  "name": "Tidewrought Coast",
+  "element": "Water",
+  "god": "Nerivael the Deep Mind",
+  "sacredAnimals": ["Whale", "Serpent"],
+  "villageName": "Thalassport",
+  "description": "Rugged ocean coastline of misty sea-cliffs, tidal flats, flooded pre-flood ruins, and abyssal sea trenches.",
+  "themeColors": {
+    "primary": "#0284c7",
+    "secondary": "#0e7490",
+    "glow": "#38bdf8",
+    "ambientLight": "#e0f2fe",
+    "waterDeep": "#082f49"
+  },
+  "landmarks": [
+    { "id": "thalassport_harbor", "name": "Thalassport Harbor", "x": 120, "z": -20 },
+    { "id": "marinas_quarterdeck", "name": "Captain's Quarterdeck", "x": 110, "z": -35 },
+    { "id": "sluice_control_dam", "name": "Tidal Sluice Controls", "x": 138, "z": -12 },
+    { "id": "whale_song_shoals", "name": "Whale Song Shoals", "x": 165, "z": 15 },
+    { "id": "serpents_trench", "name": "Serpent's Trench", "x": 80, "z": 35 },
+    { "id": "sunken_causeway", "name": "The Drowned Causeway", "x": 125, "z": 65 },
+    { "id": "pearl_reflection_cliff", "name": "Temple Reflection Cliffs", "x": 125, "z": 110 },
+    { "id": "sanctuary_of_nerivael", "name": "Sanctuary of the Deep Mind", "x": 125, "z": 160 }
+  ],
+  "puzzles": {
+    "sluice_flow": {
+      "id": "sluice_puzzle",
+      "name": "The Sluice Lock Mechanism",
+      "hint": "Open the sea-surge valve (1), close the mud-gate (2), then engage the lower weir drain (3) to drain the sunken harbor pathway.",
+      "targetSequence": [1, 2, 3],
+      "rewardItem": "sluice_gear_crank"
+    },
+    "sunken_path": {
+      "id": "sunken_path_puzzle",
+      "name": "The Drowned Causeway",
+      "hint": "The churning coastal deep will submerge ordinary travelers, but Kaelen's Magic Eye [V] reveals the ancient submerged coral causeway.",
+      "stonesCount": 7
+    },
+    "tidal_reflection": {
+      "id": "tidal_reflection_puzzle",
+      "name": "The Tidal Pearl Mirrors",
+      "hint": "Rotate the three pearl reflection mirrors until the coastal light beams converge upon the Abyssal Vault Gate.",
+      "targetAlignments": [0, 90, 180]
+    }
+  },
+  "quests": {
+    "q_tide_arrival": {
+      "id": "q_tide_arrival",
+      "title": "Tides of Thalassport",
+      "giver": "Captain Marina",
+      "description": "Report to Captain Marina at the Thalassport Quarterdeck and consult Sea-Seer Vael near the tide pools.",
+      "objectives": [
+        { "id": "obj_speak_marina", "text": "Speak with Captain Marina at the Thalassport Quarterdeck", "completed": false },
+        { "id": "obj_speak_vael", "text": "Consult Sea-Seer Vael by the sacred tide pools", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "tidewrought": 15 },
+        "items": ["sunken_relic_fragment"]
+      }
+    },
+    "q_tide_sluice": {
+      "id": "q_tide_sluice",
+      "title": "The Draining of the Flats",
+      "giver": "Scholar Sylas",
+      "description": "Deliver the relic fragment to Scholar Sylas and solve the harbor sluice gate puzzle to uncover the flooded causeway.",
+      "objectives": [
+        { "id": "obj_deliver_relic", "text": "Deliver Coral Astrolabe to Scholar Sylas", "completed": false },
+        { "id": "obj_drain_sluice", "text": "Operate the Harbor Sluice Valves to lower the water", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "tidewrought": 20 },
+        "items": ["sluice_gear_crank"]
+      }
+    },
+    "q_abyssal_beasts": {
+      "id": "q_abyssal_beasts",
+      "title": "Voices of the Deep",
+      "giver": "Sea-Seer Vael",
+      "description": "Journey to Whale Song Shoals to commune with the Sacred Abyssal Whale, and brave Serpent's Trench to receive the Great Serpent's blessing.",
+      "objectives": [
+        { "id": "obj_commune_whale", "text": "Commune with the Sacred Whale at Whale Song Shoals", "completed": false },
+        { "id": "obj_commune_serpent", "text": "Receive the serpent scale at Serpent's Trench", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "tidewrought": 25 },
+        "items": ["whale_ambergris", "serpent_scale_talisman"]
+      }
+    },
+    "q_smuggler_choice": {
+      "id": "q_smuggler_choice",
+      "title": "The Smuggler's Bargain",
+      "giver": "Corvo the Smuggler",
+      "description": "Corvo offers a stolen pearl prism that opens the temple vault, but asks you to hide his contraband cache from Captain Marina. A hard moral choice awaits.",
+      "objectives": [
+        { "id": "obj_make_choice", "text": "Decide whether to aid Corvo or report his syndicate to Captain Marina", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "tidewrought": 15 },
+        "items": ["abyssal_prism_pearl"]
+      }
+    },
+    "q_sunken_depths": {
+      "id": "q_sunken_depths",
+      "title": "The Drowned Causeway",
+      "giver": "Scholar Sylas",
+      "description": "Cross the treacherous flooded tidal chasm. Activate Kaelen's Magic Eye [V] to reveal the submerged coral pathway.",
+      "objectives": [
+        { "id": "obj_cross_sunken", "text": "Traverse the Drowned Causeway using Eye Vision", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "tidewrought": 20 }
+      }
+    },
+    "q_reflection_altar": {
+      "id": "q_reflection_altar",
+      "title": "The Mirror of Tides",
+      "giver": "Temple Gate Guardian",
+      "description": "Rotate the three Tidal Pearl Mirrors on the sea cliffs to direct lunar reflections into the Abyssal Vault Gate.",
+      "objectives": [
+        { "id": "obj_align_mirrors", "text": "Rotate the 3 Pearl Mirrors to focus water reflections onto the Gate", "completed": false },
+        { "id": "obj_unlock_vault", "text": "Insert the Luminescent Tidal Pearl to unseal the Sanctuary", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "tidewrought": 25 }
+      }
+    },
+    "q_deep_mind_verdict": {
+      "id": "q_deep_mind_verdict",
+      "title": "The Deep Mind's Verdict",
+      "giver": "Nerivael the Deep Mind",
+      "description": "Descend into the Sunken Sanctuary, face the sea god Nerivael, and claim the Water Elemental Stone.",
+      "objectives": [
+        { "id": "obj_face_nerivael", "text": "Witness the divine manifestation of Nerivael", "completed": false },
+        { "id": "obj_claim_water_stone", "text": "Claim the Stone of Abyssal Depth", "completed": false }
+      ],
+      "rewards": {
+        "clanTrust": { "tidewrought": 35 },
+        "elementalStones": ["tidewrought"]
+      }
+    }
+  }
+}
